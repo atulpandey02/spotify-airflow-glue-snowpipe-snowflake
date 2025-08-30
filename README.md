@@ -81,9 +81,16 @@ Execute the Snowflake SQL scripts to create:
 ## 🏛️ Architecture Deep Dive
 
 ### Data Flow Architecture
-```
-Spotify API → [Lambda/Airflow] → S3 Raw → [Glue/Python] → S3 Transformed → Snowpipe → Snowflake → BI Tools
-```
+
+**Local / Python in DAG**
+
+![Local architecture](diagrams/architecture_local_diagram.png)
+
+
+**Serverless / Lambda + Glue**
+
+![Serverless architecture](diagrams/architecture_external_diagram.png)
+
 
 ### Storage Layer Design
 ```
@@ -110,9 +117,14 @@ S3 Bucket Structure:
 - **Task Orchestration**: Airflow DAG with XCom for inter-task communication
 
 **Task Flow:**
-```python
-fetch_data >> store_raw_to_s3 >> read_data_from_s3 >> [process_album, process_artist, process_songs] >> [store_*_to_s3] >> move_processed_data_task
-```
+
+**Local / Python in DAG**
+
+![Local DAG](diagrams/spotify_etl_dag.png)
+
+**Serverless / Lambda + Glue**
+
+![Serverless DAG](diagrams/spotify_trigger_external.png)
 
 **Data Processing Features:**
 - **Deduplication** across album_id, artist_id, and song_id
@@ -148,40 +160,6 @@ df_songs = df_exploded.select(
     # ... additional fields
 )
 ```
-
----
-
-## 📊 Data Schema
-
-### Output Tables
-
-**tbl_songs**
-| Column | Type | Description |
-|--------|------|-------------|
-| song_id | VARCHAR | Primary key from Spotify |
-| song_name | VARCHAR | Track title |
-| duration_ms | INTEGER | Track duration in milliseconds |
-| popularity | INTEGER | Spotify popularity score (0-100) |
-| song_added | TIMESTAMP | When added to playlist |
-| album_id | VARCHAR | Foreign key to albums |
-| artist_id | VARCHAR | Foreign key to artists |
-| url | VARCHAR | Spotify external URL |
-
-**tbl_albums**
-| Column | Type | Description |
-|--------|------|-------------|
-| album_id | VARCHAR | Primary key from Spotify |
-| name | VARCHAR | Album title |
-| release_date | DATE | Album release date |
-| total_tracks | INTEGER | Number of tracks in album |
-| url | VARCHAR | Spotify external URL |
-
-**tbl_artists**
-| Column | Type | Description |
-|--------|------|-------------|
-| artist_id | VARCHAR | Primary key from Spotify |
-| artist_name | VARCHAR | Artist name |
-| external_url | VARCHAR | Spotify artist URL |
 
 ---
 
