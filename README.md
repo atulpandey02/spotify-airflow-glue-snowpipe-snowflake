@@ -38,12 +38,9 @@ This project demonstrates **enterprise-grade ETL architecture** by implementing 
 | **Serverless (Lambda+Glue)** | Deploy Lambda + Glue → `docker/serverless-airflow` → trigger `spotify_trigger_external` | Lambda extracts → S3 sensor waits → Glue transforms | Same curated outputs, then Snowpipe auto-ingests to Snowflake |
 
 ### Prerequisites
-```bash
-# Required accounts & credentials
-- AWS Account (S3, Lambda, Glue access)
-- Snowflake Account
-- Spotify Developer Account
-```
+- AWS account (S3, Lambda, Glue)
+- Snowflake account
+- Spotify Developer account
 
 ### 1. Infrastructure Setup
 ```bash
@@ -99,7 +96,7 @@ Execute the Snowflake SQL scripts to create:
 **Serverless / Lambda + Glue**
 
 <p align="center">
-  <img src="diagrams/architecture_external_diagram.png" alt="Local architecture" width="800">
+  <img src="diagrams/architecture_external_diagram.png" alt="External architecture" width="800">
 </p>
 
 
@@ -132,7 +129,7 @@ S3 Bucket Structure:
 **Local / Python in DAG**
 
 <p align="center">
-  <img src="diagrams/spotify_etl_dag.png" alt="Local architecture" width="800">
+  <img src="diagrams/spotify_etl_dag.png" alt="etl dag" width="800">
 </p>
 
 **Data Processing Features:**
@@ -148,7 +145,7 @@ S3 Bucket Structure:
 **Serverless / Lambda + Glue**
 
 <p align="center">
-  <img src="diagrams/spotify_trigger_external.png" alt="Local architecture" width="800">
+  <img src="diagrams/spotify_trigger_external.png" alt="trigger external" width="800">
 </p>
 
 **Architecture Components:**
