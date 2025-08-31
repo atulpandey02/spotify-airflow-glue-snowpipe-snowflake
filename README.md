@@ -30,6 +30,13 @@ This project demonstrates **enterprise-grade ETL architecture** by implementing 
 
 ## 🚀 Quick Start
 
+### Quickstart (at a glance)
+
+| Path | You run | It does | Outputs |
+|---|---|---|---|
+| **Local (Python in DAG)** | `docker/local-airflow` → `docker compose up -d` → trigger `spotify_etl_dag` | Extract & transform inside Airflow | `s3://…/raw_data/*`, `s3://…/transformed_data/{songs_data,artist_data,album_data}` |
+| **Serverless (Lambda+Glue)** | Deploy Lambda + Glue → `docker/serverless-airflow` → trigger `spotify_trigger_external` | Lambda extracts → S3 sensor waits → Glue transforms | Same curated outputs, then Snowpipe auto-ingests to Snowflake |
+
 ### Prerequisites
 ```bash
 # Required accounts & credentials
@@ -145,10 +152,9 @@ S3 Bucket Structure:
 </p>
 
 **Architecture Components:**
-- **AWS Lambda**: Serverless extraction with automatic scaling
-- **AWS Glue**: Distributed PySpark processing for large datasets
-- **Snowflake Sensors**: Airflow sensors to detect new files and trigger processing
-- **CloudWatch**: Monitoring and logging
+- Lambda for **extraction** (Spotify API → S3 raw)
+- AWS Glue (Spark) for **transformation** (raw → curated CSVs)
+- Airflow orchestrates with **S3 sensors (S3KeySensor)** to detect new files
 
 **Transformation Logic:**
 ```python
