@@ -392,62 +392,6 @@ SELECT SYSTEM$PIPE_STATUS('pipe_songs');
 - **Consistency**: Date format standardization across tables
 - **Referential Integrity**: Foreign key relationships maintained
 
-### Future Enhancements
-```python
-# Example data quality check
-def validate_spotify_data(df):
-    assert df.filter(col("song_id").isNull()).count() == 0, "Null song_ids found"
-    assert df.filter(col("popularity") < 0).count() == 0, "Invalid popularity scores"
-    assert df.filter(col("duration_ms") <= 0).count() == 0, "Invalid song durations"
-    return df
-```
-
----
-
-## 💰 Cost Optimization Strategies
-
-### AWS Cost Management
-- **Lambda**: Right-sized memory allocation (128MB-512MB)
-- **Glue**: DPU optimization based on data volume
-- **S3**: Lifecycle policies for automatic archival
-```bash
-# Example lifecycle policy
-{
-  "Rules": [{
-    "Status": "Enabled",
-    "Filter": {"Prefix": "raw_data/processed/"},
-    "Transitions": [{
-      "Days": 30,
-      "StorageClass": "STANDARD_IA"
-    }]
-  }]
-}
-```
-
-### Snowflake Cost Control
-```sql
--- Auto-suspend warehouse after 1 minute of inactivity
-ALTER WAREHOUSE ANALYTICS_WH SET 
-    AUTO_SUSPEND = 60 
-    AUTO_RESUME = TRUE
-    WAREHOUSE_SIZE = 'X-SMALL';
-```
-
----
-
-## 🔐 Security Best Practices
-
-### AWS Security
-- **IAM Roles**: Principle of least privilege
-- **VPC**: Network isolation for sensitive operations
-- **Encryption**: S3 server-side encryption enabled
-- **Secrets Manager**: Secure credential storage
-
-### Data Privacy
-- **No PII Collection**: Only public playlist metadata
-- **Data Retention**: Configurable retention policies
-- **Access Logging**: Complete audit trail
-
 ---
 
 ## 📊 Performance Metrics
@@ -463,120 +407,6 @@ ALTER WAREHOUSE ANALYTICS_WH SET
 - **Concurrent Playlists**: 50+ playlists simultaneously
 - **Historical Data**: 2+ years retention
 - **Query Performance**: Sub-second analytics queries
-
----
-
-## 🛠️ Local Development
-
-### Running with Docker Compose
-```yaml
-version: '3.8'
-services:
-  airflow-webserver:
-    image: apache/airflow:2.7.0
-    environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-    volumes:
-      - ./dags:/opt/airflow/dags
-      - ./plugins:/opt/airflow/plugins
-    ports:
-      - "8080:8080"
-```
-
-### Testing Individual Components
-```bash
-# Test Spotify API connection
-python -c "
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-client = SpotifyClientCredentials()
-sp = spotipy.Spotify(client_credentials_manager=client)
-print(sp.user_playlists('spotify')['items'][0]['name'])
-"
-
-# Test S3 connectivity
-aws s3 ls s3://spotify-etl-project-{name}/
-
-# Test Snowflake connection
-snowsql -c my_connection -q "SELECT COUNT(*) FROM tbl_songs;"
-```
-
----
-
-## 📈 Advanced Features
-
-### Real-time Processing
-- **Stream Processing**: Kinesis integration for live data
-- **Change Data Capture**: Track playlist modifications
-- **Event-driven Architecture**: S3 events trigger immediate processing
-
-### Data Lineage Tracking
-```python
-# Example lineage metadata
-lineage_info = {
-    "source": "spotify_api",
-    "extraction_timestamp": datetime.now(),
-    "transformation_job_id": glue_job_run_id,
-    "target_tables": ["tbl_songs", "tbl_albums", "tbl_artists"],
-    "record_count": total_records_processed
-}
-```
-
-### Machine Learning Integration
-- **Feature Engineering**: Extract audio features from Spotify API
-- **Recommendation Engine**: Build collaborative filtering models
-- **Trend Analysis**: Predict popular music patterns
-
----
-
-## 🎯 Business Value
-
-### Use Cases
-1. **Music Analytics**: Track trending songs and artists
-2. **A&R Intelligence**: Discover emerging talent patterns
-3. **Playlist Optimization**: Data-driven curation strategies
-4. **Market Research**: Music industry trend analysis
-
-### KPIs Enabled
-- Artist popularity trajectories
-- Album performance metrics
-- Playlist engagement patterns
-- Genre trend analysis
-
----
-
-## 🔮 Future Roadmap
-
-### Phase 1: Enhanced Data Sources
-- [ ] Integrate additional Spotify endpoints (audio features, genres)
-- [ ] Add support for multiple playlists and user data
-- [ ] Implement real-time streaming with Kinesis
-
-### Phase 2: Advanced Analytics
-- [ ] Machine learning pipeline for music recommendations
-- [ ] Sentiment analysis on track descriptions
-- [ ] Clustering analysis for music categorization
-
-### Phase 3: Production Hardening
-- [ ] Multi-region deployment for high availability
-- [ ] Advanced monitoring with custom metrics
-- [ ] Automated testing and CI/CD pipeline
-
----
-
-## 🤝 Contributing
-
-### Development Workflow
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/new-feature`)
-3. Implement changes with tests
-4. Submit pull request with detailed description
-
-### Code Standards
-- **Python**: Follow PEP 8 style guidelines
-- **SQL**: Use consistent naming conventions
-- **Documentation**: Update README for new features
 
 ---
 
@@ -637,4 +467,14 @@ spotify-airflow-glue-snowpipe-snowflake/
 
 ---
 
-*Built with ❤️ for the data engineering community*
+## Conclusion
+
+This project demonstrates a production-ready ETL pipeline that showcases both traditional Airflow orchestration and modern serverless AWS architecture. The dual-approach implementation highlights different strategies for handling Spotify data processing at scale.
+
+Key technical achievements:
+- **Dual Architecture**: Airflow-based and Lambda/Glue serverless approaches
+- **Data Integration**: Spotify API → S3 → Snowflake with automated ingestion
+- **Orchestration**: Sensor-based file detection and processing coordination
+- **Analytics Ready**: Structured data optimized for business intelligence tools
+
+The pipeline successfully processes playlist metadata into normalized relational tables, enabling music analytics and trend analysis while maintaining data quality and processing reliability.
