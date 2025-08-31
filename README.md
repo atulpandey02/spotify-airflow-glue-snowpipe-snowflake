@@ -84,12 +84,16 @@ Execute the Snowflake SQL scripts to create:
 
 **Local / Python in DAG**
 
-![Local architecture](diagrams/architecture_local_diagram.png)
+<p align="center">
+  <img src="diagrams/architecture_local_diagram.png" alt="Local architecture" width="800">
+</p>
 
 
 **Serverless / Lambda + Glue**
 
-![Serverless architecture](diagrams/architecture_external_diagram.png)
+<p align="center">
+  <img src="diagrams/architecture_external_diagram.png" alt="Local architecture" width="800">
+</p>
 
 
 ### Storage Layer Design
@@ -120,11 +124,9 @@ S3 Bucket Structure:
 
 **Local / Python in DAG**
 
-![Local DAG](diagrams/spotify_etl_dag.png)
-
-**Serverless / Lambda + Glue**
-
-![Serverless DAG](diagrams/spotify_trigger_external.png)
+<p align="center">
+  <img src="diagrams/spotify_etl_dag.png" alt="Local architecture" width="800">
+</p>
 
 **Data Processing Features:**
 - **Deduplication** across album_id, artist_id, and song_id
@@ -134,10 +136,18 @@ S3 Bucket Structure:
 
 ### Approach 2: Serverless AWS Pipeline
 
+**Task Flow:**
+
+**Serverless / Lambda + Glue**
+
+<p align="center">
+  <img src="diagrams/spotify_trigger_external.png" alt="Local architecture" width="800">
+</p>
+
 **Architecture Components:**
 - **AWS Lambda**: Serverless extraction with automatic scaling
 - **AWS Glue**: Distributed PySpark processing for large datasets
-- **S3 Event Integration**: Automated pipeline triggering
+- **Snowflake Sensors**: Airflow sensors to detect new files and trigger processing
 - **CloudWatch**: Monitoring and logging
 
 **Transformation Logic:**
@@ -561,16 +571,6 @@ lineage_info = {
 - **Python**: Follow PEP 8 style guidelines
 - **SQL**: Use consistent naming conventions
 - **Documentation**: Update README for new features
-
----
-
-## 📞 Support & Contact
-
-For questions, issues, or collaboration opportunities:
-
-- **Technical Issues**: Create GitHub issue with detailed logs
-- **Feature Requests**: Submit enhancement proposals
-- **Collaboration**: Reach out for data engineering discussions
 
 ---
 
