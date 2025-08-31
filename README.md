@@ -22,9 +22,9 @@ This project demonstrates **enterprise-grade ETL architecture** by implementing 
 - Direct S3 integration with XCom for task communication
 
 **Approach 2: Serverless AWS Architecture**
-- Event-driven Lambda functions for extraction and transformation
-- AWS Glue for distributed data processing
-- Automated pipeline triggering with S3 sensors
+- Lambda for **extraction** (Spotify API → S3 raw)
+- AWS Glue (Spark) for **transformation** (raw → curated CSVs)
+- Airflow orchestrates with **S3 sensors (S3KeySensor)** to detect new files
 
 ---
 
