@@ -12,7 +12,7 @@
 
 ## 🎯 Project Overview
 
-This project demonstrates **enterprise-grade ETL architecture** by implementing **two distinct approaches** for processing Spotify music data - showcasing both **traditional orchestration** and **modern serverless patterns**. The pipeline extracts playlist metadata from Spotify's API, transforms it using PySpark, and loads it into Snowflake for analytics consumption.
+This project demonstrates **enterprise-grade ETL architecture** by implementing **two distinct approaches** for processing Spotify music data showcasing both **traditional orchestration** and **modern serverless patterns**. The pipeline extracts playlist metadata from Spotify's API, transforms it using PySpark, and loads it into Snowflake for analytics consumption.
 
 ### 🏗️ Dual Architecture Approach
 
@@ -590,30 +590,43 @@ This project demonstrates:
 ## 📄 Repository Structure
 
 ```
-spotify-etl-pipeline/
-├── 📁 airflow/
-│   ├── dags/
-│   │   ├── spotify_etl_dag.py              # Complete Airflow ETL pipeline
-│   │   └── spotify_trigger_external.py     # Serverless orchestration DAG
-│   └── plugins/
-├── 📁 aws/
-│   ├── lambda/
-│   │   └── spotify_api_data_extract.py     # Lambda extraction function
-│   └── glue/
-│       └── spotify_transformation.py       # PySpark transformation job
-├── 📁 snowflake/
-│   └── sql/
-│       └── setup_tables_and_pipes.sql      # Snowflake DDL and Snowpipe config
-├── 📁 docs/
-│   ├── architecture_diagrams/
-│   ├── setup_guides/
-│   └── troubleshooting/
-├── 📁 tests/
-│   ├── unit/
-│   └── integration/
-├── 📄 docker-compose.yml                   # Local development environment
-├── 📄 requirements.txt                     # Python dependencies
-└── 📄 README.md                           # This file
+spotify-airflow-glue-snowpipe-snowflake/
+├─ arch-local-airflow/
+│  └─ airflow/
+│     └─ dags/
+│        ├─ .gitkeep
+│        └─ spotify_airflow_pipeline.py
+│
+├─ arch-serverless-lambda-glue/
+│  ├─ airflow/
+│  │  └─ dags/
+│  │     ├─ .gitkeep
+│  │     └─ spotify_trigger_external.py
+│  └─ code/
+│     ├─ glue_job/
+│     └─ lambda_extract/
+│
+├─ diagrams/
+│  ├─ .gitkeep
+│  ├─ architecture_external_diagram.png
+│  ├─ architecture_local_diagram.png
+│  ├─ spotify_etl_dag.png
+│  └─ spotify_trigger_external.png
+│
+├─ docker/
+│  ├─ local-airflow/
+│  │  ├─ .gitkeep
+│  │  └─ docker-compose.yaml
+│  └─ serverless-airflow/
+│     ├─ .gitkeep
+│     └─ docker-compose.yaml
+│
+└─ sql/
+   └─ snowflake/
+      ├─ .gitkeep
+      ├─ Spotify_snowflake.sql
+      └─ README.md
+
 ```
 
 ---
